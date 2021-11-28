@@ -1,0 +1,751 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block title %} Priborlar kategoriyalar bo'yicha {% endblock %}
+{% block content%}
+{% load mathfilters %}
+<style type="text/css">
+@media print
+{
+body * { visibility: hidden; }
+.small { visibility: hidden; }
+#info * { visibility: visible; }
+#info { margin-top:-1100px;margin-left:-175px;width:152%}
+}
+
+</style>
+
+<!-- Page top section start -->
+<div class="page-top-area set-bg" data-setbg="{% static 'img/recent-thumb/2.jpg' %}">
+	<div class="breadcrumb-area">
+		<marquee behavior="" direction=""><a href="#">/ Barcha priborlar</a></marquee>
+	</div>
+</div>
+
+<!--	<hr>-->
+	<!-- Blogs section start -->
+	<section class="blogs-section container-fluid" style="width: 80%">
+
+		<hr>
+
+			<h3 class="text text-info">Ma'lumotlarni tezkor qidirish</h3>
+		<hr>
+		<div>
+<!--			<button data-toggle="collapse" style="width:20%" data-target="#demo" class="btn btn-info text">Ma'lumotlarni tezkor qidirish </button>-->
+<!--			<br>-->
+<!--			<hr>-->
+
+
+			<div id="demo" >
+				<form action="{% url 'search' %}" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+				 <div class="row">
+
+				 	<div class="col-md-6">
+				 		<div class="form-group">
+						    <label for="pwd">Toyifa bo'yicha saralash:</label>
+						    <select class="form-control" id="category_id" name="category_id">
+								<option value="-1" selected style="">----Toifani tanlang----</option>
+								{% for category in categories %}
+									<option value="{{category.id}}">{{category.name}}</option>
+								{% endfor %}
+
+						    </select>
+						</div>
+				  	</div>
+
+					 <div class="col-md-6">
+				 		<div class="form-group">
+						     <label>Quyi toyifalar bo'yicha saralash:</label>
+						    <select name="department_search" id="department_search" class="form-control">
+										<option value="0">------ Quyi toifani tanlang --------</option>
+										{% for subcategory in subcategories %}
+											<option value="{{subcategory.id}}">{{subcategory.name}}</option>
+										{% endfor %}
+							</select>
+						</div>
+				  	</div>
+
+				  	<div class="col-md-6">
+				 		<div class="form-group">
+						    <label for="pwd">INV raqami :</label>
+						    <input type="text" class="form-control" placeholder="INN raqami" id="id_number_item" name="id_number_item">
+				  		</div>
+				  	</div>
+
+				  	<div class="col-md-6">
+				 		<div class="form-group">
+						    <label for="pwd">Pribor nomi :</label>
+						    <input type="text" class="form-control" placeholder="Pribor nomi" id="name_item" name="name_item">
+				  		</div>
+				  	</div>
+
+
+
+
+				  	<div class="col-md-8">
+				 		<div class="form-group">
+<!--						    -->
+						    <div class="row">
+						    	<div class="col-md-6">
+									<label for="issue_date">Muddatdan:</label>
+						    		<input type="date"  class="form-control" placeholder="Aniq bo'yicha" id="issue_date_item" name="issue_date_item">
+						    	</div>
+
+						    	<div class="col-md-6"  id="extra">
+									<label for="expiry_date">Vaqtgacha sertificati tugaydiganlar:</label>
+						    		 <input type="date"  class="form-control" placeholder="Aniq bo'yicha" id="expiry_date_item" name="expiry_date_item">
+						    	</div>
+
+						    </div>
+
+				  		</div>
+				  	</div>
+
+					 <div class="col-md-2">
+				 		<div class="form-group">
+						    <label >Passport bor :</label>
+							<br>
+						    <label class="radio-inline" style="padding: 5px">
+		                            <input type="radio" id="status_passport_1" name="status_passport" value="1" style="padding: 10px" > <i class="fa fa-check text-success" aria-hidden="true"></i>Bor
+		                        </label>
+
+							     <label class="radio-inline" style="padding: 5px">
+		                            <input type="radio" id="status_passport_2" name="status_passport" value="2" style="padding: 10px"> <i class="fa fa-times-circle text-danger" aria-hidden="true"></i>Yoq
+		                        </label>
+				  		</div>
+				  	</div>
+
+
+
+
+					 	<div class="col-md-6">
+				 		<div class="form-group">
+						    <label for="pwd">Qiyoslash o'tkazgan tashkilot :</label>
+						    <input type="text" class="form-control" placeholder="Briktirilgan tashkilot" id="belongs_to_item" name="belongs_to_item">
+				  		</div>
+				  	</div>
+
+					  <div class="col-md-6">
+						<div class="form-group">
+							<label for="responsible_user"><span class="text-danger">*</span> Moddiy javobgar shaxs </label>
+							<input type="text" class="form-control" name="responsible_user" list="responsible_user">
+							<datalist id="responsible_user" >
+								{% for person in persons %}
+									<option value="{{person.name}}">
+								{% endfor %}
+							</datalist>
+						</div>
+				  </div>
+
+				  	<div class="col-md-8">
+						<div class="form-group">
+							<label for="pwd">Xujjat xolati bo'yicha:</label>
+						   <div class="custom-control custom-checkbox">
+							     <label class="radio-inline" style="padding: 5px">
+		                            <input type="radio" id="status1" name="status" value="1" style="padding: 5px" > Barchasi
+		                        </label>
+
+							     <label class="radio-inline" style="padding: 5px">
+		                            <input type="radio" id="status2" name="status" value="2" style="padding: 5px"> Yaroqli
+		                        </label>
+
+							   <label class="radio-inline" style="padding: 5px">
+		                            <input type="radio" id="status5" name="status" value="5" style="padding: 5px"> Yaroqsiz
+		                        </label>
+							   <label class="radio-inline" style="padding: 5px">
+		                            <input type="radio" id="status3" name="status" value="3" style="padding: 5px"> Kam qolgan
+		                        </label>
+
+		                        <label class="radio-inline" style="padding: 5px">
+		                            <input type="radio" id="status4" name="status" value="4" style="padding: 5px"> Tugagan
+		                        </label>
+
+							   <label class="radio-inline" style="padding: 5px">
+		                            <input type="radio" id="status6" name="status" value="6" style="padding: 5px"> Vaqtincha yaroqsiz
+		                        </label>
+
+							    <label class="radio-inline" style="padding: 5px">
+		                            <input type="radio" id="status7" name="status" value="7" style="padding: 5px"> Tuzatilganlar
+		                        </label>
+
+
+						    </div>
+
+				  		</div>
+				  </div>
+
+				  	<!-- <div class="col-md-3">
+				  		<div class="form-group form-check">
+						    <label class="form-check-label">
+						    	<input class="form-check-input" type="checkbox"> Remember me
+						    </label>
+						 </div>
+				  	</div> -->
+
+
+					 <input type="text" id="status_value" name="status_value" style="display:none">
+					 <input type="text" id="status_battery_value" name="status_battery_value" style="display:none">
+					 <input type="text" id="status_passport_value" name="status_passport_value" style="display:none">
+
+				 </div>
+
+				 <button type="submit"   class="btn btn-success" style="width:20%"> <i class="fa fa-search" style=""></i> Qidirish</button>
+				 <button type="reset" class="btn btn-danger" style="width:20%"> <i class="fa fa-window-close" style=""></i> Tozalash</button>
+				</form>
+			</div>
+		</div>
+
+		<hr>
+		<!-- DataTables Example -->
+
+
+		<div class="row">
+			<div class="col-md-12 col-lg-12 col-sm-12">
+				<div class="card mb-3">
+			<div class="card-header">
+				<i class="fa fa-table"></i>
+				Priborlar
+				<b class="btn btn-warning"  onclick="print_page()" style="float:right;margin-right:15px;width:10%;margin-top:-1px"><i class="fa fa-print" aria-hidden="true"></i>  Print </b>
+			</div>
+
+			<div class="card-body" >
+
+				<div class="table-responsive info" id="info">
+					       <table class="table table-bordered table-striped info" id="dataTable" width="100%" cellspacing="0" style="text-align: center">
+						<thead>
+						<tr>
+							<th>Toyifasi</th>
+							<th>Quyi toifa</th>
+							<th>INV raqami</th>
+							<th>Nomi</th>
+							<th>Qiyoslash o'tkazgan tashkilot</th>
+							<th>Sertificate tugash muddati</th>
+							<th>Passport mavjudligi</th>
+							<th>Moddiy javobgar shaxs</th>
+							<th>Holati</th>
+							<th>Ko'rish</th>
+						</tr>
+						</thead>
+
+							   <tbody>
+							   {% if items != 0 %}
+						{% for item in items %}
+										<tr>
+											<td>{{item.category.name}}</td>
+											<td>{{item.subcategory.name}}</td>
+											<td>{{item.inv_number}}</td>
+											<td>{{item.name}}</td>
+											<td>
+												{% for pribor1 in item.appliances.all %}
+															{% if forloop.last %}
+																{{pribor1.checked_organization}}
+																{% if not pribor1.checked_organization  %}
+																	<i>Bu priporda <b class="text text-success">passport va muvoffiqlik</b> sertifikati bor</i>
+																{% endif %}
+															{% endif %}
+													{% endfor %}
+											</td>
+
+											<td>
+													{% for pribor1 in item.appliances.all %}
+															{% if forloop.last %}
+
+
+																{% if pribor1.expiry_date.year > current_year %}
+<!--																	<img  src="{% static 'icons/green.png' %}" style="width: 50%" alt="">-->
+																		<p data-toggle="tooltip" data-placement="bottom" title="Sertificat tugashiga 1 yildan kop vaqt bor!" style="color:white;background-color:green;font-weight:bold">{{pribor1.expiry_date}}</p>
+																{% endif %}
+
+																{% if pribor1.expiry_date.year == current_year %}
+
+																	{% if pribor1.expiry_date.month > current_month %}
+																		<p data-toggle="tooltip" data-placement="bottom" title="Sertificat tugashiga 1 oydan kop vaqt bor!" style="color:white;background-color:green;font-weight:bold">{{pribor1.expiry_date}}</p>
+																	{% endif %}
+
+				<!--													1-red-->
+				<!--													2-yellow-->
+				<!--													3-green-->
+
+																	{% if pribor1.expiry_date.month == current_month %}
+
+																		{% if pribor1.expiry_date.day > current_day %}
+																			{% if pribor1.expiry_date.day|sub:current_day > 10 %}
+																				<p data-toggle="tooltip" data-placement="bottom" title="Sertificat tugashiga 10 kundan ko'p vaqt bor !" style="color:white;background-color:green;font-weight:bold">{{pribor1.expiry_date}}</p>
+																			{% endif %}
+																			{% if current_day|sub:pribor1.expiry_date.day < 10 %}
+																					<p data-toggle="tooltip" data-placement="bottom" title="Sertificat tugashiga 10 kundan kam vaqt bor !" style="color:black;background-color:#ffff00;font-weight:bold">{{pribor1.expiry_date}}</p>
+																			{% endif %}
+
+																			{% if current_day|sub:pribor1.expiry_date.day == 0 %}
+																				<p data-toggle="tooltip" data-placement="bottom" title="Sertificat amal qilish muddati tugagan !"  style="color:white;background-color:red;font-weight:bold">{{pribor1.expiry_date}}</p>
+																			{% endif %}
+																		{% else %}
+																				<p data-toggle="tooltip" data-placement="bottom" title="Sertificat amal qilish muddati tugagan !"  style="color:white;background-color:red;font-weight:bold">{{pribor1.expiry_date}}</p>
+																		{% endif %}
+
+																	{% elif pribor1.expiry_date.month < current_month %}
+																		<p data-toggle="tooltip" data-placement="bottom" title="Sertificat amal qilish muddati tugagan !"  style="color:white;background-color:red;font-weight:bold">{{pribor1.expiry_date}}</p>
+																	{% endif %}
+
+																{% elif pribor1.expiry_date.year < current_year %}
+																		<p data-toggle="tooltip" data-placement="bottom" title="Sertificat amal qilish muddati tugagan !"  style="color:white;background-color:red;font-weight:bold">{{pribor1.expiry_date}}</p>
+																{% endif %}
+															{% endif %}
+													{% endfor %}
+											</td>
+
+											<td>
+												{% if item.status_passport == 1 %}
+													<a href="/{{item.passport}}" style="font-size:14px" title="Passport faylini ko'rish" class="text text-info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Passport</a>
+													<b class="text text-success" style="font-size:13px"> <br><i class="fa fa-check-square" aria-hidden="true"></i> Bor</b>
+													<br>
+												{% endif %}
+
+												{% if item.status_passport == 0 %}
+													<b class="text text-danger" style="font-size:13px"><i class="fa fa-times-circle" aria-hidden="true"></i> Yoq</b>
+												{% endif %}
+
+												{% for pribor in item.appliances.all %}
+															{% if forloop.last %}
+																{% if not pribor.checked_organization  %}
+																	<a href="/{{item.compatibility_file}}" style="font-size:14px" title="Muvoffiqlik sertifikatini ko'rish" class="text text-info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Muvoffiqlik sertifikati</a>
+																{% endif %}
+															{% endif %}
+													{% endfor %}
+											</td>
+											<td style="width: 10%">{{item.responsible_user}}</td>
+
+											<td>
+												{% if item.status == 1 %}
+													<i class="text text-warning">Vaqtincha yaroqsiz</i>
+												{% elif item.status == 2 %}
+													<i class="text text-danger">Yaroqsiz</i>
+												{% elif item.status == 3 %}
+													<i class="text text-danger">Tuzatilgan</i>
+												{% else %}
+														<i  class="text text-success">Yaroqli</i>
+												{% endif %}
+											</td>
+											<td><a href="{% url 'show' item.id %}" class="btn btn-info">Ko'rish</a></td>
+										</tr>
+
+							{% endfor %}
+							   {% endif %}
+
+
+							{% if certificates != 0 %}
+							{% regroup certificates by appliance.name as certificate1 %}
+								{% for file1 in certificate1 %}
+									{% for certificate in file1.list %}
+									{% if forloop.last %}
+										<tr>
+											<td>{{certificate.appliance.category.name}}</td>
+											<td>{{certificate.appliance.subcategory.name}}</td>
+											<td>{{certificate.appliance.inv_number}}</td>
+											<td>{{certificate.appliance.name}}</td>
+											<td>
+												{% if certificate.file %}
+													{{certificate.checked_organization}}
+												{% else %}
+													<i>Bu priporda <b class="text text-success">passport va muvoffiqlik</b> sertifikati bor</i>
+												{% endif %}
+											</td>
+											<td>
+
+																{% if certificate.expiry_date.year > current_year %}
+<!--																	<img  src="{% static 'icons/green.png' %}" style="width: 50%" alt="">-->
+																		<p data-toggle="tooltip" data-placement="bottom" title="Sertificat tugashiga 1 yildan kop vaqt bor!" style="color:white;background-color:green;font-weight:bold">{{certificate.expiry_date}}</p>
+																{% endif %}
+
+																{% if certificate.expiry_date.year == current_year %}
+
+																	{% if certificate.expiry_date.month > current_month %}
+																		<p data-toggle="tooltip" data-placement="bottom" title="Sertificat tugashiga 1 oydan kop vaqt bor!" style="color:white;background-color:green;font-weight:bold">{{certificate.expiry_date}}</p>
+																	{% endif %}
+
+				<!--													1-red-->
+				<!--													2-yellow-->
+				<!--													3-green-->
+
+																	{% if certificate.expiry_date.month == current_month %}
+
+																		{% if certificate.expiry_date.day > current_day %}
+																			{% if certificate.expiry_date.day|sub:current_day > 10 %}
+																				<p data-toggle="tooltip" data-placement="bottom" title="Sertificat tugashiga 10 kundan ko'p vaqt bor !" style="color:white;background-color:green;font-weight:bold">{{certificate.expiry_date}}</p>
+																			{% endif %}
+																			{% if current_day|sub:certificate.expiry_date.day < 10 %}
+																					<p data-toggle="tooltip" data-placement="bottom" title="Sertificat tugashiga 10 kundan kam vaqt bor !" style="color:black;background-color:#ffff00;font-weight:bold">{{certificate.expiry_date}}</p>
+																			{% endif %}
+
+																			{% if current_day|sub:certificate.expiry_date.day == 0 %}
+																				<p data-toggle="tooltip" data-placement="bottom" title="Sertificat amal qilish muddati tugagan !"  style="color:white;background-color:red;font-weight:bold">{{certificate.expiry_date}}</p>
+																			{% endif %}
+																		{% else %}
+																				<p data-toggle="tooltip" data-placement="bottom" title="Sertificat amal qilish muddati tugagan !"  style="color:white;background-color:red;font-weight:bold">{{certificate.expiry_date}}</p>
+																		{% endif %}
+
+																	{% elif certificate.expiry_date.month < current_month %}
+																		<p data-toggle="tooltip" data-placement="bottom" title="Sertificat amal qilish muddati tugagan !"  style="color:white;background-color:red;font-weight:bold">{{certificate.expiry_date}}</p>
+																	{% endif %}
+
+																{% elif certificate.expiry_date.year < current_year %}
+																		<p data-toggle="tooltip" data-placement="bottom" title="Sertificat amal qilish muddati tugagan !"  style="color:white;background-color:red;font-weight:bold">{{certificate.expiry_date}}</p>
+																{% endif %}
+
+
+											</td>
+											<td>
+												{% if certificate.appliance.status_passport == 1 %}
+													<b class="text text-success"><i class="fa fa-check-square" aria-hidden="true"></i> Bor</b>
+												<a href="/{{certificate.appliance.passport}}">Fayli</a>
+												{% endif %}
+
+												{% if certificate.appliance.status_passport == 0 %}
+													<b class="text text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Yoq</b>
+												{% endif %}
+
+												{% if certificate.appliance.status_compatibility_file_value == 1 %}
+													<a href="/{{certificate.appliance.compatibility_file}}" title="Muvoffiqlik sertifikatini ko'rish" class="text text-info"><br><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Muvoffiqlik sertifikati</a>
+												{% endif %}
+
+											</td>
+											<td style="width: 10%">{{certificate.appliance.responsible_user}}</td>
+
+											<td>
+
+												{% if certificate.appliance.status == 1 %}
+													<a href="#" class="text text-warning">Vaqtincha yaroqsiz</a>
+												{% elif certificate.appliance.status == 2 %}
+													<a href="#" class="text text-danger">Yaroqsiz</a>
+												{% else %}
+														<a href="#" class="text text-success">Yaroqli</a>
+												{% endif %}
+											</td>
+											<td><a href="{% url 'show' certificate.appliance.id %}" class="btn btn-info">Ko'rish</a></td>
+										</tr>
+							   {% endif %}
+
+								{% endfor %}
+							{% endfor %}
+						{% endif %}
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+
+<!--			print-->
+				<div class="table-responsive" id="print_window1" style="display:none">
+					<table   width="100%" cellspacing="0" style="text-align: center;border:0.5px solid black">
+						<thead>
+						<tr style="border:1px solid black">
+
+							<th style="border:1px solid black">Toyifasi</th>
+							<th style="border:1px solid black">Quyi toyifa</th>
+							<th style="border:1px solid black">INV</th>
+							<th style="border:1px solid black">Nomi</th>
+							<th style="border:1px solid black">Qiyoslash o'tkazgan tashkilot</th>
+							<th style="border:1px solid black">Tugash muddati</th>
+							<th style="border:1px solid black">Passport</th>
+							<th style="border:1px solid black">Javobgar shaxs</th>
+							<th style="border:1px solid black">Holati</th>
+						</tr>
+						</thead>
+
+						<tbody>
+
+							{% if items != 0 %}
+							{% for item in items  %}
+										<tr style="border:1px solid black">
+											<td style="border:1px solid black">{{item.category.name}}</td>
+											<td style="border:1px solid black">{{item.subcategory.name}}</td>
+											<td style="border:1px solid black">{{item.inv_number}}</td>
+											<td style="border:1px solid black">{{item.name}}</td>
+											<td style="border:1px solid black">
+
+													{% for pribor1 in item.appliances.all %}
+															{% if forloop.last %}
+																{{pribor1.checked_organization}}
+																{% if not pribor1.checked_organization  %}
+																	<i>Bu priporda <b class="text text-success">passport va muvoffiqlik</b> sertifikati bor</i>
+																{% endif %}
+															{% endif %}
+													{% endfor %}
+
+
+											</td>
+											<td style="border:1px solid black">
+
+													{% for pribor1 in item.appliances.all %}
+															{% if forloop.last %}
+																{{pribor1.expiry_date}}
+															{% endif %}
+													{% endfor %}
+
+											<td style="border:1px solid black">
+												{% if item.status_passport == 1 %}
+<!--													<a href="/{{item.passport}}" style="font-size:14px" title="Passport faylini ko'rish" class="text text-info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Passport</a>-->
+													<b class="text text-success"><i class="fa fa-check-square" aria-hidden="true"></i> Bor</b>
+													<br>
+
+												{% endif %}
+
+												{% if item.status_passport == 0 %}
+													<b class="text text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Yoq</b>
+												{% endif %}
+
+<!--												{% for pribor in item.appliances.all %}-->
+<!--															{% if forloop.last %}-->
+<!--																{% if not pribor.checked_organization  %}-->
+<!--																	<a href="/{{item.compatibility_file}}" style="font-size:14px" title="Muvoffiqlik sertifikatini ko'rish" class="text text-info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Muvoffiqlik sertifikati</a>-->
+<!--																{% endif %}-->
+<!--															{% endif %}-->
+<!--													{% endfor %}-->
+
+											</td>
+											<td style="width: 10%;border:1px solid black">{{item.responsible_user}}</td>
+
+											<td style="border:1px solid black">
+												{% if item.status == 1 %}
+													<i class="text text-warning">Vaqtincha yaroqsiz</i>
+												{% elif item.status == 2 %}
+													<i class="text text-danger">Yaroqsiz</i>
+												{% else %}
+														<i  class="text text-success">Yaroqli</i>
+												{% endif %}
+											</td>
+										</tr>
+							{% endfor %}
+							{% endif %}
+
+
+					{% if certificates != 0 %}
+							{% regroup certificates by appliance.name as certificate %}
+								{% for file1 in certificate %}
+									{% for file in file1.list %}
+									{% if forloop.last %}
+										<tr style="border:1px solid black">
+											<td style="border:1px solid black">{{file.appliance.category.name}}</td>
+											<td style="border:1px solid black">{{file.appliance.subcategory.name}}</td>
+											<td style="border:1px solid black">{{file.appliance.inv_number}}</td>
+											<td style="border:1px solid black">{{file.appliance.name}}</td>
+											<td style="border:1px solid black">
+												{% if file.file %}
+													{{file.checked_organization}}
+												{% else %}
+													<i>Bu priporda <b class="text text-success">passport va muvoffiqlik</b> sertifikati bor</i>
+												{% endif %}
+											</td>
+											<td style="border:1px solid black">{{file.expiry_date}}</td>
+											<td style="border:1px solid black">
+												{% if file.appliance.status_passport == 1 %}
+													<b class="text text-success"><i class="fa fa-check-square" aria-hidden="true"></i> Bor</b>
+												{% endif %}
+
+												{% if file.appliance.status_passport == 0 %}
+													<b class="text text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Yoq</b>
+												{% endif %}
+											</td>
+											<td style="width: 10%; border:1px solid black">{{file.appliance.responsible_user}}</td>
+
+											<td style="border:1px solid black">
+
+												{% if file.appliance.status == 1 %}
+													<a href="#" class="text text-warning">Vaqtincha yaroqsiz</a>
+												{% elif file.appliance.status == 2 %}
+													<a href="#" class="text text-danger">Yaroqsiz</a>
+												{% else %}
+														<a href="#" class="text text-success">Yaroqli</a>
+												{% endif %}
+											</td>
+
+										</tr>
+
+									{% endif %}
+								{% endfor %}
+							{% endfor %}
+
+						{% endif %}
+
+						</tbody>
+					</table>
+				</div>
+
+
+
+<!--				print page-->
+
+
+
+			</div>
+
+			<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+		</div>
+
+	</section>
+	<!-- Blogs section end -->
+
+
+<!--<script>-->
+<!--	 document.getElementById("href").value = window.location.href;-->
+<!--</script>-->
+
+<!--<script>-->
+<!--	function Checkbox_checking()-->
+<!--	{-->
+<!--		var checkBox = document.getElementById("battery")-->
+<!--		if (checkBox.checked == true){-->
+<!--		document.getElementById("battery_value").value = 1;}-->
+<!--	}-->
+<!--</script>-->
+
+<!--<script>-->
+<!--	function file_choose(){-->
+<!--		var fileinput = document.getElementById("file");-->
+<!--		var filename = fileinput.files[0].name;-->
+<!--		document.getElementById("file_name").value=filename;}-->
+<!--</script>-->
+
+<!--	<script>-->
+<!--		$(document).ready(function(){-->
+<!--			$('[data-toggle="tooltip"]').tooltip();-->
+<!--		});-->
+<!--	</script>-->
+
+
+{% endblock %}
+
+{% block scriptcontent %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+   $(document).ready(function(){
+   	$("input[name='status']").click(function(){
+   		$("#status_value").val(this.value);
+   	});
+   });
+
+</script>
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
+<script>
+	function print_page()
+		{
+		  var divToPrint=document.getElementById('print_window1').innerHTML;
+
+		  var newWin=window.open('','Print-Window');
+
+		  newWin.document.open();
+
+		  newWin.document.write('<html><body onload="window.print()">'+divToPrint+'</body></html>');
+
+		  newWin.document.close();
+
+		  setTimeout(function(){newWin.close();},5);
+		}
+
+</script>
+
+<script type="text/javascript">
+
+   $(document).ready(function(){
+   	$("input[name='status_battery']").click(function(){
+   		$("#status_battery_value").val(this.value);
+   	});
+   });
+
+   $(document).ready(function(){
+   	$("input[name='status_passport']").click(function(){
+   		$("#status_passport_value").val(this.value);
+   	});
+   });
+
+
+
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#search").click(function(event) {
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+        data.append("category_id", $('#category_id').val());
+        data.append("item_id", $('#item_id').val());
+        data.append("id_number", $('#id_number').val());
+        data.append("name", $('#name').val());
+        data.append("belongs_to", $('#belongs_to').val());
+        data.append("issue_date", $('#issue_date').val());
+        data.append("expiry_date", $('#expiry_date').val());
+        data.append("status", $('input[name="status"]:checked').val());
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'search' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+            text=``
+            	for(i in result['items']){
+            		text+=`
+						<tr>
+							<td>`+(parseInt(i)+1)+`</td>
+							<td>`+result['items'][i].category_id__name+`</td>
+							<td>`+result['items'][i].id_number+`</td>
+							<td>`+result['items'][i].name+`</td>
+							<td>`+result['certificates'][j].item__issue_date+`</td>
+							<td>`+result['items'][i].item__expiry_date+`</td>
+
+							<td>`+result['items'][i].item__expiry_date+`</td>
+
+							<td style="width: 10%">
+								<a href="/static/files/`+result['items'][i].item__file+`" style="font-weight: bold" data-toggle="tooltip" title="STF Faylini ko'rish">Fayl1
+								`;
+								if(result['items'][i].item__status == 0)
+								text+=`<img src="{% static 'img/color/3.png' %}" style="width: 15%" alt="">`;
+
+								if (result['items'][i].item__status == 1)
+								text+=`<img src="{% static 'img/color/2.png' %}" style="width: 15%" alt="">`;
+
+								if (result['items'][i].item__status == 2)
+								text+=`<img src="{% static 'img/color/1.png' %}" style="width: 15%" alt="">`;
+								text+=`</a>
+							</td>
+							<td><a href="`+result['items'][i].id+`" class="btn btn-info">Ko'rish</a></td>
+<!--							<td>`+result['certificates'][i].certificate_id__expiry_date+`</td>-->
+
+					</tr>
+            `;
+            }
+
+             $('#data').html(text);
+
+            },
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+
+
+        });
+    });
+</script>
+
+<!--	<script src="{% static 'extra/js/jquery.min.js' %}"></script>-->
+	<script src="{% static 'extra/js/jquery.dataTables.js' %}"></script>
+	<script src="{% static 'extra/js/dataTables.bootstrap4.js' %}"></script>
+	<script src="{% static 'extra/js/datatables-demo.js' %}"></script>
+{% endblock scriptcontent %}

@@ -1,0 +1,54 @@
+{% if items != 0 %}
+							{% for item in items  %}
+								{% regroup item.appliances.all by appliance_id as pribors %}
+									{% for pribor in pribors %}
+										<tr>
+											<td>{{item.subcategory.name}}</td>
+											<td>{{item.inv_number}}</td>
+											<td>{{item.name}}</td>
+											<td>
+												{% for i in pribor.list %}
+
+													{% if forloop.counter == 1 %}
+														{{i.checked_organization}}
+													{% endif %}
+
+												{% endfor %}
+											</td>
+											<td>
+												{% for i in pribor.list %}
+
+													{% if forloop.counter == 1 %}
+														{{i.expiry_date.date}}
+													{% endif %}
+
+												{% endfor %}
+
+											<td>
+												{% if item.status_passport == True %}
+													<b class="text text-success"><i class="fa fa-check-square" aria-hidden="true"></i> Bor</b>
+													<a href="/{{item.passport}}">Fayli</a>
+												{% endif %}
+
+												{% if item.status_passport == False %}
+													<b class="text text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Yoq</b>
+												{% endif %}
+											</td>
+											<td style="width: 10%">{{item.responsible_user}}</td>
+
+											<td>
+												{% if item.status == 1 %}
+													<i class="text text-warning">Vaqtincha yaroqsiz</i>
+												{% elif item.status == 2 %}
+													<i class="text text-danger">Yaroqsiz</i>
+												{% else %}
+														<i  class="text text-success">Yaroqli</i>
+												{% endif %}
+											</td>
+											<td><a href="{% url 'show' item.id %}" class="btn btn-info">Ko'rish</a></td>
+										</tr>
+
+									{% endfor %}
+
+							{% endfor %}
+							{% endif %}

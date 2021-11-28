@@ -1,0 +1,172 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block title %} Priborlar modeli bo'yicha {% endblock %}
+{% block content%}
+{% block stylecontent %}
+<style>
+	li{
+		list-style-type:none
+	}
+
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2);
+  transition: 0.4s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 16px 26px 0 rgba(0,0,0,0.5);
+}
+
+/* Add some padding inside the card container */
+.container1 {
+  padding: 2px 16px;
+}
+
+.card:before,
+.card:after{
+  transform: translate(0,0);
+  opacity: 1;
+}
+</style>
+{% endblock stylecontent %}
+<!-- Page top section start -->
+<div class="page-top-area set-bg" data-setbg="{% static 'img_bg/6.jpg' %}" style=" background-repeat: no-repeat;background-position: center; background-size: 1000px 350px;">
+	<div class="breadcrumb-area">
+		<marquee behavior="" direction=""><a href="#">/ Priborlar modeli bo'yicha</a></marquee>
+	</div>
+</div>
+	<!-- Page top section end -->
+
+	<hr>
+	<!-- Portfolio section start -->
+	<section class="portfolio-section" >
+		<div class="container-fluid" style="width: 80%">
+
+			{% if messages %}
+				<ul class="text text-center" style="font-size:20px">
+					{% for message in messages %}
+						{% if message.tags == "error"  %}
+							<div class="alert alert-error" style="background-color: #f7d7da">
+						  		<b ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </b> <span>{{ message }}</span>
+							</div>
+
+						{% else %}
+							<div class="alert alert-success" style="background-color:#d4edda">
+						  		<b>Tabriklaymiz !</b> <span class="text text-success">{{ message }}</span>
+							</div>
+						{% endif %}
+					{% endfor %}
+				</ul>
+
+			{% endif %}
+
+			<h2 class="text-center text-success">Priborlar modeli bo'yicha</h2>
+
+			<hr>
+
+<!--			{% if user.is_authenticated %}-->
+<!--					{% if user.profile.admin_type == 1 %}-->
+<!--						<a href="{% url 'history' %}"  class="text text-success"><i class="fa fa-plus" aria-hidden="true"></i> Yangi qo'shish</a>-->
+<!--					{% endif %}-->
+<!--				{% endif %}-->
+<!--			<hr>-->
+
+			<div class="row" style="border:1px dotted #3ba2eb;padding:50px;border-radius:5px;background-color:#f3f9fd">
+
+				{% for category in categories %}
+
+						<div class="col-md-4 text-center" style="padding: 20px;">
+
+						<div class="card">
+<!--							  	<img src="{% static 'images/2.jpg' %}" style="border-radius: 5px;width: 0%;height: 400px" alt="">-->
+							  <div class="container1">
+<!--								<h4><b>John Doe</b></h4>-->
+<!--								<p>Architect & Engineer</p>-->
+								  <br>
+								  <a href="{% url 'items_with_category' id=category.id %}"  class="btn btn-outline-info"><b>{{ category.name }}</b></a>
+								<br><br>
+
+									<h5 class="text" style="color:#6a798c"><span class="text text-success">* </span>
+										<i>Mavjud priborlar soni ---
+
+											<b class="decument_count" style="color:green" data-all="{% for item in category.categories.all %}{% if item.is_delete == 0 %}{{item.id}},{% endif %}{% endfor %}">
+<!--												{% for item in category.categories.all %}-->
+<!--														{% if item.is_delete == 0 %}-->
+<!--															{{forloop.counter}}-->
+<!--														{% else %}-->
+
+<!--														{% endif %}-->
+<!--												{% endfor %}-->
+
+<!--												{% if category.categories.is_delete == 0 %}-->
+<!--													{{forloop.counter}}-->
+<!--												{% endif %}-->
+											0
+											</b> ta</i>
+									</h5>
+								  <br>
+							  </div>
+						</div>
+
+<!--							<a href="{% url 'items_with_category' category.id %}" >-->
+<!--								<img src="{% static 'images/2.jpg' %}" style="border-radius: 5px;width: 80%;height: 400px" alt="">-->
+<!--								<br>-->
+<!--								<br>-->
+<!--								<a href="#" class="btn btn-danger">{{ category.name }}</a>-->
+<!--								<br><br>-->
+<!--								<div>-->
+
+
+<!--									<h5 class="text text-primary"><span class="text text-success">* </span>-->
+<!--										<i>Количество устройств -&#45;&#45; <b style="color:green">{{category.categories.count}}</b> ta</i>-->
+<!--									</h5>-->
+
+<!--								</div>-->
+<!--							</a>-->
+
+						</div>
+
+				{% endfor %}
+			</div>
+
+			<hr>
+		</div>
+
+<!--{% for item in category.categories.all %}-->
+<!--						{% for certificate in item.items.all %}-->
+<!--		{% endfor %}-->
+<!--					{% endfor %}-->
+
+<!--		&lt;!&ndash;		<div class="clearfix"></div>&ndash;&gt;-->
+<!--		<div class="sp-pad next-portfolio-link " >-->
+<!--			<nav aria-label="Page navigation example">-->
+<!--				<ul class="pagination">-->
+<!--					<li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--					<li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--					<li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--					<li class="page-item"><a class="page-link" href="#">Keyingi</a></li>-->
+<!--				</ul>-->
+<!--			</nav>-->
+<!--		</div>-->
+
+	</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+$('.decument_count').each(function(i,obj){
+    let text=$(this).attr('data-all');
+    num=text.split(',');
+    let s=0;
+    for(let i in num){
+    if(num[i]!='')
+      s++;
+      }
+        $(this).text(s);
+    });
+  });
+</script>
+
+{% endblock %}

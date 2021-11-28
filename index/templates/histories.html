@@ -1,0 +1,115 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block title %} Tavsilotlar {% endblock %}
+{% block content%}
+
+<!-- Page top section start -->
+<div class="page-top-area set-bg" data-setbg="{% static 'img/pribor/4.jpg' %}">
+	<div class="breadcrumb-area">
+		<a href="#">/ Tarix</a>
+	</div>
+</div>
+
+<!--	<hr>-->
+	<!-- Blogs section start -->
+	<section class="blogs-section container-fluid" style="width: 80%">
+		<hr>
+		<!-- DataTables Example -->
+		<div class="card mb-3">
+			<div class="card-header">
+				<i class="fa fa-table"></i>
+				Tarix
+			</div>
+
+			<div class="card-body">
+				<div class="table-responsive">
+					       <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0" style="text-align: center">
+						<thead>
+						<tr>
+							<th>#</th>
+							<th>Kimdan kelgan</th>
+							<th>Tashkilot nomi</th>
+							<th>Pribor nomi</th>
+							<th>Pribor INV raqami</th>
+							<th>Yuborilgan vaqti</th>
+							<th>Tavfsilot</th>
+							<th>Ko'rish</th>
+						</tr>
+						</thead>
+
+							   <tbody>
+
+						{% for history in histories %}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{history.user.username}}</td>
+									<td>{{history.user.profile.company}}</td>
+									<td>{{history.appliance.name}}</td>
+									<td>{{history.appliance.inv_number}}</td>
+									<td>{{history.date}}</td>
+									<th>
+										{% if history.status == 1 %}
+											<i class="text text-warning"> Qurilma vaqtincha yaroqsiz</i>
+										{% endif %}
+
+										{% if history.status == 2 %}
+											<i class="text text-danger">Qurilma yaroqsiz deb topildi</i>
+											<a href="/{{history.invalid_file}}">Qaror fayli</a>
+										{% endif %}
+
+										{% if history.status == 3 %}
+											<i class="text text-success">Tuzatildi</i>
+										{% endif %}
+
+										{% if history.status == 4 %}
+											<i class="text text-danger">Sertifikar o'chirildi</i>
+										{% endif %}
+
+										{% if history.status == 5 %}
+											<i class="text text-warning">Sertifikat o'zgartirildi</i>
+										{% endif %}
+
+										{% if history.status == 6 %}
+											<i class="text text-success">Yangi pribor qo'shgan</i>
+										{% endif %}
+										{% if history.status == 7 %}
+											<i class="text text-success">Yangi sertificate qo'shgan</i>
+										{% endif %}
+
+										{% if history.status == 8 %}
+											<i class="text text-danger">Priborni o'chirgan</i>
+										{% endif %}
+
+										{% if history.status == 9 %}
+											<i class="text text-warning">Priborni ma'lumotlarini o'zgartirgan</i>
+										{% endif %}
+									</th>
+									<td><a href="{% url 'show' history.appliance.id %}" class="btn btn-info">Ko'rish</a></td>
+								</tr>
+						{% endfor %}
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+		</div>
+
+	</section>
+
+
+
+
+
+{% endblock %}
+
+{% block scriptcontent %}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+	<script src="{% static 'extra/js/jquery.dataTables.js' %}"></script>
+	<script src="{% static 'extra/js/dataTables.bootstrap4.js' %}"></script>
+	<script src="{% static 'extra/js/datatables-demo.js' %}"></script>
+
+
+{% endblock scriptcontent %}

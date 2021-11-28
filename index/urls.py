@@ -1,0 +1,46 @@
+from django.urls import path, re_path
+from django.views.static import serve
+from django.conf import settings
+from . import views
+from django.contrib.auth.decorators import login_required
+
+urlpatterns = [
+    re_path(r'^$', views.index, name='index'),
+    re_path(r'^items_with_category/(?P<id>\d+)/$', views.items_with_category, name='items_with_category'),
+    re_path(r'^show/(?P<id>\d+)/$', views.show, name='show'),
+    re_path(r'^item_edit/(?P<id>\d+)/$', views.item_edit, name='item_edit'),
+    re_path(r'^delete_item/$', views.delete_item, name='delete_item'),
+    # re_path(r'^delete_by_certificate/$', views.delete_by_certificate, name='delete_by_certificate'),
+    re_path(r'^add/$', views.add, name='add'),
+    re_path(r'^items/$', views.items, name='items'),
+    re_path(r'^action/$', views.action, name='action'),
+    re_path(r'^edit_category$', views.edit_category, name='edit_category'),
+    re_path(r'^edit_sub_category$', views.edit_sub_category, name='edit_sub_category'),
+    re_path(r'^edit_certificate_response$', views.edit_certificate_response, name='edit_certificate_response'),
+    re_path(r'^change_category$', views.change_category, name='change_category'),
+    re_path(r'^change_sub_category$', views.change_sub_category, name='change_sub_category'),
+    re_path(r'^new_category$', views.new_category, name='new_category'),
+    re_path(r'^new_sub_category$', views.new_sub_category, name='new_sub_category'),
+    re_path(r'^delete_category$', views.delete_category, name='delete_category'),
+    re_path(r'^delete_sub_category$', views.delete_sub_category, name='delete_sub_category'),
+    re_path(r'^delete_category_1$', views.delete_category_1, name='delete_category_1'),
+    re_path(r'^delete_sub_category_1$', views.delete_sub_category_1, name='delete_sub_category_1'),
+    re_path(r'^profile/$', views.profile, name='profile'),
+    re_path(r'^delete_certificate$', views.delete_certificate, name='delete_certificate'),
+    re_path(r'^do_valid$', views.do_valid, name='do_valid'),
+    re_path(r'^edit_certificate$', views.edit_certificate, name='edit_certificate'),
+    re_path(r'^edit_item$', views.edit_item, name='edit_item'),
+    re_path(r'^search/$', views.search, name='search'),
+    re_path(r'^send_comment$', views.send_comment, name='send_comment'),
+    re_path(r'^history/$', views.history, name='history'),
+    re_path(r'^search_item/$', views.search_item, name='search_item'),
+    re_path(r'^add_pribor_page/(?P<id>\d+)/$', views.add_pribor_page, name='add_pribor_page'),
+    re_path(r'^add_pribor/$', views.add_pribor, name='add_pribor'),
+    re_path(r'^register/$', views.register, name='register'),
+    re_path(r'^login/$', views.login, name='login'),
+    re_path(r'^logout/$', views.logout, name='logout'),
+    re_path(r'^send', views.send, name='send'),
+    re_path(r'^reset/(?P<user>\w+)/$', views.reset_password, name='reset_password'),
+    re_path(r'^password_change/$', views.password_change, name='password_change'),
+    re_path(r'^index/data/files/(?P<path>.*)',serve, {'document_root': settings.DOCS_ROOT}),
+]

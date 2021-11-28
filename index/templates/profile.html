@@ -1,0 +1,676 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block title %} Super admin sahifasi {% endblock %}
+{% block content%}
+
+{% block stylecontent %}
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<style xmlns="http://www.w3.org/1999/html">
+	li{
+		list-style-type:none
+	}
+
+	.ui-dialog {
+
+  z-index: 1000 !important;
+}
+
+  .ui-widget-header{
+<!--background: white;-->
+padding: 20px;
+color: #fff;
+}
+
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2);
+  transition: 0.4s;
+}
+.fa:hover{
+	transform: scale(1.5,1.5);
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 16px 26px 0 rgba(0,0,0,0.5);
+}
+
+/* Add some padding inside the card container */
+.container1 {
+  padding: 2px 16px;
+}
+
+.card:before,
+.card:after{
+  transform: translate(0,0);
+  opacity: 1;
+}
+</style>
+{% endblock stylecontent %}
+<!-- Page top section start -->
+<div class="page-top-area set-bg" data-setbg="{% static 'img/recent-thumb/2.jpg' %}">
+	<div class="breadcrumb-area">
+		<marquee behavior="" direction="">
+			<a href="#">/ Admin sahifasi</a>
+		</marquee>
+	</div>
+</div>
+	<!-- Page top section end -->
+
+	<hr>
+	<!-- Portfolio section start -->
+	<section class="portfolio-section" >
+		<div class="container-fluid" style="width: 80%">
+
+			{% if messages %}
+				<ul class="text text-center" style="font-size:20px">
+					{% for message in messages %}
+						{% if message.tags == "error"  %}
+							<div class="alert alert-error" style="background-color: #f7d7da">
+						  		<b ><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </b> <span>{{ message }}</span>
+							</div>
+
+						{% else %}
+							<div class="alert alert-success" style="background-color:#d4edda">
+						  		<b>Tabriklaymiz !</b> <span class="text text-success">{{ message }}</span>
+							</div>
+						{% endif %}
+					{% endfor %}
+				</ul>
+
+			{% endif %}
+
+			<h2 class="text-center text-info">Admin sahifasi</h2>
+
+			<hr>
+
+			<div class="row">
+
+				<div class="col-md-6">
+					<h2 class="text text-center text-info">Toifalar</h2>
+					<hr>
+					{% if user.is_authenticated %}
+						{% if user.profile.admin_type == 1 %}
+							<div class="text text-right">
+								<a href="#" id="show_add_dialog" class="text text-success" data-placement="bottom" ><i class="fa fa-plus" aria-hidden="true"></i> Yangi toifa qo'shish</a>
+							</div>
+						{% endif %}
+					{% endif %}
+					<hr>
+
+						<div id="add_dialog">
+								<div class="modal-content">
+									<h4 class="text text-info text-center" >Yangi toifa qo'shish</h4>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<label for="new_category_name"><span class="text-danger">*</span>  Toifa nomi </label>
+											<input type="text"  class="form-control"  name="new_category_name" id="new_category_name" placeholder="Toifa nomi">
+										</div>
+										<button id="add_category"  class="btn btn-success" style="float:right;width:20%"><b>Qo'shish</b></button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+					{% for category in categories %}
+						<div class="card">
+							  <div class="container1 text text-center">
+								  <br>
+								  <div class="row">
+									  <div class="col-md-10">
+										  <h5  class="text text-center text-info"><b>{{ category.name }}</b></h5>
+										  <br>
+<!--										  <i>{{ category.description }}</i>-->
+									  </div>
+
+									  <div class="col-md-2" style="font-size:20px;font-weight:bold">
+											<i class="fa fa-pencil-square-o text-warning edit_category" data-value="{{ category.id }}"  title="O'zgartirish" aria-hidden="true"></i> &nbsp;
+
+										  	<i class="fa fa-trash-o text-danger	delete_category" title="O'chirish" data-value2="{{ category.id }}" aria-hidden="true"></i>
+									  </div>
+								  </div>
+
+								  <br>
+							  </div>
+						</div>
+					<br>
+
+<!--				dialog-->
+			{% endfor %}
+
+				</div>
+
+<!--				dialog edit catgory-->
+
+
+				<div class="col-md-6">
+					<h2 class="text text-center text-info">Quyi toifalar</h2>
+					<hr>
+					{% if user.is_authenticated %}
+						{% if user.profile.admin_type == 1 %}
+							<div class="text text-right">
+								<a href="#" id="show_add_sub_dialog" class="text text-success"><i class="fa fa-plus" aria-hidden="true"></i> Yangi quyi toifa qo'shish</a>
+							</div>
+						{% endif %}
+					{% endif %}
+					<hr>
+					{% for category in subcategories %}
+						<div class="card">
+							  <div class="container1 text text-center">
+								  <br>
+								  <div class="row">
+									  <div class="col-md-10">
+										  <h5  class=" text text-center text-info"><b>{{ category.name }}</b></h5>
+									  </div>
+
+									   <div class="col-md-2" style="font-size:20px;font-weight:bold">
+											<i class="fa fa-pencil-square-o text-warning edit_sub_category" data-value3="{{ category.id }}"  title="O'zgartirish" aria-hidden="true"></i> &nbsp;
+
+										  	<i class="fa fa-trash-o text-danger	delete_sub_category" title="O'chirish" data-value3="{{ category.id }}" aria-hidden="true"></i>
+									  </div>
+								  </div>
+
+								  <br>
+							  </div>
+						</div>
+					<br>
+					{% endfor %}
+				</div>
+
+				<div id="add_sub_dialog">
+								<div class="modal-content">
+									<h4 class="text text-info text-center" >Yangi quyi toifa qo'shish</h4>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<label for="new_sub_category_name"><span class="text-danger">*</span> Yangi quyi toifa nomi </label>
+											<input type="text"  class="form-control"  name="new_sub_category_name" id="new_sub_category_name" placeholder="Quyi toifa nomi">
+										</div>
+										<button id="add_sub_category"  class="btn btn-success" style="float:right;width:20%"><b>Qo'shish</b></button>
+									</form>
+								</div>
+							</div>
+				</div>
+
+
+			</div>
+
+			</div>
+
+			<hr>
+
+
+		<div  id="dialog_edit_category">
+
+		</div>
+
+		<div  id="dialog_edit_sub_category">
+
+		</div>
+
+
+		<div  id="dialog_delete_category">
+
+		</div>
+
+		<div  id="dialog_delete_sub_category">
+
+		</div>
+
+
+	</section>
+
+
+
+
+{% endblock %}
+{% block scriptcontent %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+
+	   $("#dialog_edit_category").dialog({
+			autoOpen: false,
+		    modal:true,
+			show: {
+				effect: "blind",
+				duration: 300,
+				},
+				// hide: {
+					//   effect: "slide",
+					//   duration: 300,
+				// },
+				height: 300,
+				width: 600
+		});
+
+		$("#dialog_edit_sub_category").dialog({
+			autoOpen: false,
+		    modal:true,
+			show: {
+				effect: "blind",
+				duration: 300,
+				},
+				// hide: {
+					//   effect: "slide",
+					//   duration: 300,
+				// },
+				height: 300,
+				width: 600
+		});
+
+		$("#dialog_delete_category").dialog({
+			autoOpen: false,
+		    modal:true,
+			show: {
+				effect: "blind",
+				duration: 300,
+				},
+				// hide: {
+					//   effect: "slide",
+					//   duration: 300,
+				// },
+				height: 300,
+				width: 700,
+
+		});
+
+		$("#dialog_delete_sub_category").dialog({
+			autoOpen: false,
+		    modal:true,
+			show: {
+				effect: "blind",
+				duration: 300,
+				},
+				// hide: {
+					//   effect: "slide",
+					//   duration: 300,
+				// },
+				height: 300,
+				width: 700,
+
+		});
+
+		 $("#add_dialog").dialog({
+			autoOpen: false,
+		    modal:true,
+			show: {
+				effect: "blind",
+				duration: 300,
+				},
+				// hide: {
+					//   effect: "slide",
+					//   duration: 300,
+				// },
+				height: 300,
+				width: 700,
+
+		});
+
+		 $("#add_sub_dialog").dialog({
+			autoOpen: false,
+		    modal:true,
+			show: {
+				effect: "blind",
+				duration: 300,
+				},
+				// hide: {
+					//   effect: "slide",
+					//   duration: 300,
+				// },
+				height: 300,
+				width: 700,
+
+		});
+
+	  $(document).on('click',".edit_category",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+        data.append("category_id", $(this).attr('data-value'));
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'edit_category' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+
+            		text=`
+							<div class="modal-content">
+									<h4 class="text text-info text-center" >O'zgartirish</h4>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<label for="issue_date_edit"><span class="text-danger">*</span>  Toifa nomi </label>
+											<input type="text"  class="form-control" value="`+result['category'][0].name+`" id="category_name"  data-id='`+result['category'][0].id+`' name="category_name" aria-describedby="emailHelp" placeholder="Toifa nomi">
+											<input type="text" class="form-control" value="`+result['category'][0].id+`" id="category_id" name="category_id" style='display:none'>
+										</div>
+										<button id="change_category"  class="btn btn-success change_category" style="float:right;width:20%"><b>O'zgartirish</b></button>
+									</form>
+								</div>
+							</div>
+
+				`;
+			$('#dialog_edit_category').html(text);
+			$('#dialog_edit_category').dialog('open');
+			},
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+        $(document).on('click',".edit_sub_category",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+        data.append("sub_category_id", $(this).attr('data-value3'));
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'edit_sub_category' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+            console.log(result);
+            		text=`
+
+							<div class="modal-content">
+									<h4 class="text text-info text-center" >O'zgartirish</h4>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<label for="issue_date_edit"><span class="text-danger">*</span>  Toifa nomi </label>
+											<input type="text"  class="form-control" value="`+result['category'][0].name+`" id="sub_category_name"  data-id='`+result['category'][0].id+`' name="sub_category_name" aria-describedby="emailHelp" placeholder="Toifa nomi">
+											<input type="text" class="form-control" value="`+result['category'][0].id+`" id="sub_category_id" name="sub_category_id" style='display:none'>
+										</div>
+										<button id="change_sub_category"  class="btn btn-success change_sub_category" style="float:right;width:20%"><b>O'zgartirish</b></button>
+									</form>
+								</div>
+							</div>
+
+				`;
+			$('#dialog_edit_sub_category').html(text);
+			$('#dialog_edit_sub_category').dialog('open');
+			},
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+        $(document).on('click',".delete_category",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+        data.append("category_id", $(this).attr('data-value2'));
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'delete_category' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+				console.log(result);
+				text=`
+
+							<div class="modal-content">
+									<h4 class="text text-info text-center" >O'chirish</h4>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<div class="alert alert-danger alert-dismissible fade show">
+												<i class='text text-danger'>Siz rostdan ham shu toifabi o'chirmoqchimisiz ?</i>
+												<br>
+												<label for="issue_date_edit" style=font-weight:bold><span class="text-danger">*</span>  `+result['category'][0].name+` </label>
+											</div>
+<!--											<input type="text"  class="form-control" value="`+result['category'][0].name+`" id="category_name"  data-id='`+result['category'][0].id+`' name="category_name" aria-describedby="emailHelp" placeholder="Toifa nomi">-->
+											<input type="text" class="form-control" value="`+result['category'][0].id+`" id="category_id" name="category_id" style='display:none'>
+										</div>
+										<button id="delete_category_1"  class="btn btn-danger delete_category_1" style="float:right;width:20%"><b>O'chirish</b></button>
+									</form>
+								</div>
+							</div>
+
+				`;
+			$('#dialog_delete_category').html(text);
+			$('#dialog_delete_category').dialog('open');
+			},
+
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+
+         $(document).on('click',".delete_sub_category",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+        data.append("sub_category_id", $(this).attr('data-value3'));
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'delete_sub_category' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+				console.log(result);
+				text=`
+
+							<div class="modal-content">
+									<h4 class="text text-info text-center" >O'chirish</h4>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<div class="alert alert-danger alert-dismissible fade show">
+												<i class='text text-danger'>Siz rostdan ham shu quyi toifani o'chirmoqchimisiz ?</i>
+												<br>
+												<label for="issue_date_edit" style=font-weight:bold><span class="text-danger">*</span>  `+result['category'][0].name+` </label>
+											</div>
+<!--											<input type="text"  class="form-control" value="`+result['category'][0].name+`" id="sub_category_name"  data-id='`+result['category'][0].id+`' name="sub_category_name" aria-describedby="emailHelp" placeholder="Toifa nomi">-->
+												<input type="text" class="form-control" value="`+result['category'][0].id+`" id="sub_category_id" name="sub_category_id" style='display:none'>
+										</div>
+										<button id="delete_sub_category_1"  class="btn btn-danger delete_sub_category_1" style="float:right;width:20%"><b>O'chirish</b></button>
+									</form>
+								</div>
+							</div>
+
+				`;
+			$('#dialog_delete_sub_category').html(text);
+			$('#dialog_delete_sub_category').dialog('open');
+			},
+
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+        $(document).on('click',".delete_category_1",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+		data.append("id", $('#category_id').val());
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'delete_category_1' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+            	location.replace(window.location.pathname);
+			},
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+        $(document).on('click',".delete_sub_category_1",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+		data.append("id", $('#sub_category_id').val());
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'delete_sub_category_1' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+            	location.replace(window.location.pathname);
+			},
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+
+	 $(document).on('click',".change_category",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+      	data.append("category_name", $('#category_name').val());
+		data.append("id", $('#category_id').val());
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'change_category' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+            	location.replace(window.location.pathname);
+			},
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+		 $(document).on('click',".change_sub_category",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+      	data.append("sub_category_name", $('#sub_category_name').val());
+		data.append("id", $('#sub_category_id').val());
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'change_sub_category' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+            	location.replace(window.location.pathname);
+			},
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+
+
+        $(document).on('click',"#add_category",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+      	data.append("new_category_name", $('#new_category_name').val());
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'new_category' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+            	location.replace(window.location.pathname);
+			},
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+
+        $(document).on('click',"#add_sub_category",function(){
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        event.preventDefault()
+      	data.append("new_sub_category_name", $('#new_sub_category_name').val());
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'new_sub_category' %}',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            success: function (result){
+            	location.replace(window.location.pathname);
+			},
+
+            error: function(){
+              alert('Serverga yubara olmaymiz !! ');
+            }
+
+        });
+        });
+
+        $(document).on('click',"#show_add_dialog",function(){
+       		 $('#add_dialog').dialog('open');
+        });
+
+        $(document).on('click',"#show_add_sub_dialog",function(){
+       		 $('#add_sub_dialog').dialog('open');
+        });
+
+
+</script>
+
+{% endblock scriptcontent %}
