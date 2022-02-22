@@ -538,7 +538,7 @@ color: #fff;
         var data = new FormData();
         data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
         event.preventDefault()
-		data.append("id", $('#sub_category_id').val());
+				data.append("id", $('#sub_category_id').val());
         $.ajax({
             type: 'POST',
             url: '{% url 'delete_sub_category_1' %}',
@@ -564,7 +564,8 @@ color: #fff;
         data.append("csrfmiddlewaretoken", document.getElementsByName("csrfmiddlewaretoken")[0].value);
         event.preventDefault()
       	data.append("category_name", $('#category_name').val());
-		data.append("id", $('#category_id').val());
+				data.append("id", $('#category_id').val());
+        
         $.ajax({
             type: 'POST',
             url: '{% url 'change_category' %}',

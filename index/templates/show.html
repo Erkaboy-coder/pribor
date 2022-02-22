@@ -662,10 +662,10 @@ $(document).ready(function(){
       	data.append("expiry_date_edit", $('#expiry_date_edit').val());
       	data.append("checked_organization_edit", $('#checked_organization_edit').val());
       	data.append("file_edit", $('#file_edit')[0].files[0]);
-		data.append("id", $('#item_id').val());
-		data.append("certificate_id", $(this).attr('data-value'));
-		data.append("user_id", $('#user_id').val());
-		event.preventDefault()
+				data.append("id", $('#item_id').val());
+				ata.append("certificate_id", $(this).attr('data-value'));
+				data.append("user_id", $('#user_id').val());
+				event.preventDefault()
         $.ajax({
             type: 'POST',
             url: '{% url 'edit_certificate' %}',
